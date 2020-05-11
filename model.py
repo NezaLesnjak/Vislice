@@ -31,8 +31,8 @@ class Igra:
         return len(self.napacne_crke())
 
     def zmaga(self):
-        for c in self.geslo():
-            if c not in self.crke():
+        for c in self.geslo:
+            if c not in self.crke:
                 return False
         return True
 
@@ -41,8 +41,8 @@ class Igra:
 
     def pravilni_del_gesla(self):
         trenutno = ''
-        for crka in self.geslo():
-            if crka in self.crke():
+        for crka in self.geslo:
+            if crka in self.crke:
                 trenutno += crka
             else:
                 trenutno += '_'
@@ -59,7 +59,7 @@ class Igra:
 
         self.crke.append(ugibana_crka)
 
-        if ugibana_crka in self.geslo():
+        if ugibana_crka in self.geslo:
             if self.zmaga():
                 return ZMAGA
             else:
