@@ -1,6 +1,9 @@
 import random
 
 STEVILO_DOVOLJENIH_NAPAK = 10
+
+ZACETEK = 'Z'
+
 PRAVILNA_CRKA = '+'
 PONOVLJENA_CRKA = 'o'
 NAPACNA_CRKA = '-'
@@ -74,4 +77,26 @@ def nova_igra():
     nakljucna_beseda = random.choice(bazen_besed)
     return Igra(nakljucna_beseda)
 
-    
+class Vislice:
+    def __init__(self):
+        # slovar, ki ID-ju priredi objekt nove igre
+        self.igre = {}
+
+    def prosti_id_igre(self):
+        'vrne nek ID, ki ga ne uporablja nobena igra'
+        if len(self.igre) == 0:
+            return 0
+        else:
+            return max(self.igre.keys()) + 1
+
+    def nova_igra(self):
+        #dobimo svez ID, naredimo novo igro, vse to shranimo v self.igre
+        nov_id = self.prosti_id_igre()
+        sveza_igra = nova_igra()
+        self.igre[nov_id] = (sveza_igra, ZACETEK)
+        return nov_id
+
+    def ugibaj(self, id_igre, crka):
+        trenutna_igra, _ = self.igre[id_igre]
+        novo_stanje = trenutna_igra.ugibaj(crka)
+        self.igre[id_igre] = (trenutna_igra, novo_stanje)
