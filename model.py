@@ -1,4 +1,5 @@
 import random
+import json
 
 STEVILO_DOVOLJENIH_NAPAK = 10
 
@@ -91,12 +92,30 @@ class Vislice:
 
     def nova_igra(self):
         #dobimo svez ID, naredimo novo igro, vse to shranimo v self.igre
+        self.preberi_iz_datoteke()
         nov_id = self.prosti_id_igre()
         sveza_igra = nova_igra()
         self.igre[nov_id] = (sveza_igra, ZACETEK)
         return nov_id
 
     def ugibaj(self, id_igre, crka):
+        self.preberi_iz_datoteke()
         trenutna_igra, _ = self.igre[id_igre]
         novo_stanje = trenutna_igra.ugibaj(crka)
         self.igre[id_igre] = (trenutna_igra, novo_stanje)
+        self.shrani_v_datoteko()
+
+    def shrani_v_datoteko(self):
+        igre = {}
+        for id_igre, (igra, stanje) in self.igre:
+            igre[id_igre] = ((igra.geslo, igra.crke), stanje)
+
+        with open('Vislice/stanje_iger.json', 'w') as out_file:
+            json.sump(igre, out_file)
+
+    def preberi_iz_datoteke(self):
+        with open('Vislice/stanje_iger.json', 'r') as in_file:
+            igre = json.load(in_file)
+        self.igre = {}
+        for id_igre, ((geslo, crke), stanje) in igre.items():
+            self.igre[int(id_igre)] = Igra(geslo, crke), stanje
